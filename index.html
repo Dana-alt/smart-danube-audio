@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{color-scheme:dark}body{margin:0}</style>
+<title>Smart Danube Audio Story</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: one phone-width column. Animated scene card on top, caption under it, then progress and playback controls. Committed deep-blue look to match the poster. */
+:root {
+  --ink: #06203F;
+  --deep: #0A3D75;
+  --river: #2E7BC4;
+  --foam: #6FB1EA;
+  --mist: #CFE4F6;
+  --text: #EAF3FC;
+  --muted: #A9C4DD;
+  --sun: #FFD166;
+  --leaf: #7BE0A5;
+  --warn: #FF8A6B;
+  --card: #0C2F57;
+  --line: rgba(207, 228, 246, 0.24);
+  --font-head: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 32px;
+}
+.shell { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-head); font-weight: 700; letter-spacing: 0.14em; font-size: 14px; }
+.snd {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px;
+  background: transparent; color: var(--mist); border: 1px solid var(--line); border-radius: 20px;
+  font: 600 13px var(--font-body); cursor: pointer;
+}
+.snd[aria-pressed="true"] { background: var(--card); color: var(--text); }
+.stage { background: linear-gradient(var(--deep), #082F5A); border-radius: 20px; overflow: hidden; aspect-ratio: 3 / 2; max-width: 100%; }
+#art { display: block; width: 100%; height: 100%; }
+.tag { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sun); }
+.caption { margin: 0; font-family: var(--font-head); font-weight: 500; font-size: clamp(22px, 6vw, 28px); line-height: 1.25; text-wrap: balance; min-height: 6.3em; }
+.progress { display: flex; gap: 6px; }
+.progress button { flex: 1; min-width: 0; height: 24px; background: none; border: 0; padding: 0; cursor: pointer; position: relative; }
+.progress button::after { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 6px; border-radius: 3px; background: var(--line); }
+.progress button.done::after { background: var(--foam); }
+.progress button.on::after { background: var(--sun); }
+.controls { display: flex; align-items: center; justify-content: center; gap: 20px; }
+.ctl { width: 48px; height: 48px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: transparent; color: var(--mist); border: 1px solid var(--line); cursor: pointer; }
+.ctl:disabled { opacity: 0.35; cursor: default; }
+.play { width: 72px; height: 72px; background: var(--sun); color: var(--ink); border: 0; }
+.hint { margin: 0; text-align: center; font-size: 13px; color: var(--muted); }
+.cta { display: block; text-align: center; padding: 14px; border-radius: 14px; border: 1px solid var(--line); color: var(--mist); text-decoration: none; font-weight: 600; }
+.cta:hover { background: var(--card); }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+
+.wave { animation: drift 7s linear infinite; }
+@keyframes drift { to { transform: translateX(-120px); } }
+.pop { opacity: 0; transform-box: fill-box; transform-origin: center; animation: pop 0.5s ease-out forwards; animation-delay: var(--d, 0s); }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(0.92); } to { opacity: 1; transform: none; } }
+.walk { animation: walk 10s linear infinite; }
+@keyframes walk { from { transform: translateX(-30px); } to { transform: translateX(390px); } }
+.bob { animation: bob 3s ease-in-out infinite; animation-delay: var(--d, 0s); }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+.ring { transform-box: fill-box; transform-origin: center; animation: ring 2.4s ease-in-out infinite; }
+@keyframes ring { 50% { transform: scale(1.08); opacity: 0.25; } }
+.flow { animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -28; } }
+.scan { animation: scan 2.2s ease-in-out infinite alternate; }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(78px); } }
+.grow { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); animation: grow 0.8s ease-out forwards; animation-delay: var(--d, 0s); }
+@keyframes grow { to { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .wave, .walk, .bob, .ring, .flow, .scan { animation: none; }
+  .pop { animation: none; opacity: 1; }
+  .grow { animation: none; transform: none; }
+}
+</style>
+
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none" stroke="#CFE4F6" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="20" cy="20" r="18"/><path d="M8 17 C 12 13, 16 21, 20 17 S 28 13, 32 17"/><path d="M8 25 C 12 21, 16 29, 20 25 S 28 21, 32 25"/></svg>
+      SMART DANUBE
+    </div>
+    <button class="snd" id="snd" type="button" aria-pressed="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path id="sndwave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+      <span id="sndlabel">Sound on</span>
+    </button>
+  </header>
+
+  <section class="stage" aria-label="Animated scene">
+    <svg id="art" viewBox="0 0 360 240" role="img" aria-label="Illustration for the current part of the story"></svg>
+  </section>
+
+  <p class="tag" id="tag"></p>
+  <p class="caption" id="caption" aria-live="polite"></p>
+
+  <div class="progress" id="progress" role="group" aria-label="Story parts"></div>
+
+  <div class="controls">
+    <button class="ctl" id="prev" type="button" aria-label="Previous part">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+    </button>
+    <button class="ctl play" id="play" type="button" aria-label="Play the story">
+      <svg id="icoPlay" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="icoPause" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+    </button>
+    <button class="ctl" id="next" type="button" aria-label="Next part">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5l11 7L4 19z"/></svg>
+    </button>
+  </div>
+
+  <p class="hint">The website is only a demo.</p>
+  <a class="cta" href="https://smartdanube.lovable.app" target="_blank" rel="noopener">Go to website</a>
+</main>
+
+<script>
+(function () {
+  var wave = function (y, color, op, dur) {
+    return '<path class="wave" style="animation-duration:' + dur + 's" fill="' + color + '" opacity="' + op + '" d="M-120 ' + y + ' q30 -12 60 0' + ' t60 0'.repeat(10) + ' V260 H-120 Z"/>';
+  };
+  var person = function (x, y, c) {
+    return '<g transform="translate(' + x + ' ' + y + ')"><circle cy="-14" r="4" fill="' + c + '"/><rect x="-3.5" y="-9" width="7" height="12" rx="3" fill="' + c + '"/></g>';
+  };
+  var pin = function (x, y, c, q, d) {
+    return '<g class="pop" style="--d:' + d + 's"><g transform="translate(' + x + ' ' + y + ')"><path d="M0 0 C-10 -14 -16 -22 -16 -30 A16 16 0 1 1 16 -30 C16 -22 10 -14 0 0Z" fill="' + c + '"/>' +
+      (q ? '<text y="-25" text-anchor="middle" font-size="15" font-weight="700" fill="#06203F" font-family="Inter, sans-serif">?</text>' : '<circle cy="-30" r="6" fill="#06203F"/>') + '</g></g>';
+  };
+  var F = 'font-family="Space Grotesk, sans-serif"';
+
+  var arts = [
+    function () {
+      return '<circle cx="276" cy="58" r="24" fill="var(--sun)" opacity="0.95"/>' +
+        '<path d="M0 142 H360" stroke="var(--mist)" stroke-width="5"/>' +
+        '<rect x="70" y="72" width="8" height="70" fill="var(--mist)"/><rect x="282" y="72" width="8" height="70" fill="var(--mist)"/>' +
+        '<path d="M0 128 Q36 100 74 72 Q180 140 286 72 Q324 100 360 128" fill="none" stroke="var(--mist)" stroke-width="2.5"/>' +
+        '<g class="walk">' + person(0, 140, 'var(--sun)') + '</g>' +
+        '<g class="walk" style="animation-delay:-3.5s">' + person(0, 140, 'var(--leaf)') + '</g>' +
+        '<g class="walk" style="animation-delay:-7s">' + person(0, 140, 'var(--foam)') + '</g>' +
+        wave(172, 'var(--river)', 0.7, 7) + wave(190, 'var(--deep)', 0.9, 9);
+    },
+    function () {
+      return '<circle class="ring" cx="180" cy="150" r="92" fill="none" stroke="var(--warn)" stroke-width="2" stroke-dasharray="6 8" opacity="0.6"/>' +
+        '<text class="pop" x="180" y="44" text-anchor="middle" ' + F + ' font-size="19" fill="var(--muted)" style="--d:.2s">Where? What? Who acts?</text>' +
+        wave(172, 'var(--river)', 0.7, 7) +
+        '<g class="bob" style="--d:0s"><g transform="translate(70 150) rotate(-25)"><rect x="-6" y="-16" width="12" height="26" rx="4" fill="var(--foam)"/><rect x="-3" y="-22" width="6" height="7" rx="2" fill="var(--mist)"/></g></g>' +
+        '<g class="bob" style="--d:.6s"><rect x="138" y="142" width="22" height="30" rx="4" fill="var(--warn)"/></g>' +
+        '<g class="bob" style="--d:1.2s"><g transform="translate(228 150)"><path d="M-12 -10 Q0 -22 12 -10 L9 12 Q0 16 -9 12Z" fill="#fff" opacity="0.85"/></g></g>' +
+        '<g class="bob" style="--d:1.8s"><rect x="288" y="146" width="30" height="18" rx="3" fill="var(--mist)"/></g>' +
+        wave(192, 'var(--deep)', 0.9, 9);
+    },
+    function () {
+      return '<path d="M-10 190 C80 150 140 210 220 175 S340 160 370 180" fill="none" stroke="var(--river)" stroke-width="18" opacity="0.5"/>' +
+        '<path d="M60 20 V220 M150 20 V220 M240 20 V220 M330 20 V220 M0 70 H360 M0 130 H360" stroke="var(--line)" stroke-width="1" opacity="0.6"/>' +
+        pin(64, 120, 'var(--muted)', true, 0) + pin(144, 160, 'var(--muted)', true, 0.3) + pin(226, 110, 'var(--muted)', true, 0.6) + pin(302, 150, 'var(--muted)', true, 0.9) +
+        '<text class="pop" x="180" y="218" text-anchor="middle" ' + F + ' font-size="15" fill="var(--muted)" style="--d:1.2s">Nobody\'s responsibility, yet</text>';
+    },
+    function () {
+      return '<g class="pop"><rect x="40" y="78" width="52" height="52" rx="12" fill="var(--sun)"/><text x="66" y="112" text-anchor="middle" ' + F + ' font-size="22" font-weight="700" fill="#06203F">WC</text></g>' +
+        '<path class="flow" d="M104 104 H268" stroke="var(--mist)" stroke-width="2.5" stroke-dasharray="6 8" fill="none"/>' +
+        '<text x="186" y="92" text-anchor="middle" ' + F + ' font-size="13" fill="var(--muted)">far apart</text>' +
+        '<g class="pop" style="--d:.5s">' + person(300, 130, 'var(--mist)') + '<text x="300" y="82" text-anchor="middle" ' + F + ' font-size="26" font-weight="700" fill="var(--warn)">?</text></g>' +
+        wave(186, 'var(--river)', 0.7, 7) + wave(204, 'var(--deep)', 0.9, 9);
+    },
+    function () {
+      var chip = function (x, y, d, icon, word) {
+        return '<g class="pop" style="--d:' + d + 's"><rect x="' + x + '" y="' + y + '" width="152" height="70" rx="16" fill="var(--card)" stroke="var(--line)"/>' +
+          '<g transform="translate(' + (x + 30) + ' ' + (y + 35) + ')">' + icon + '</g>' +
+          '<text x="' + (x + 62) + '" y="' + (y + 42) + '" ' + F + ' font-size="20" font-weight="700" fill="var(--text)">' + word + '</text></g>';
+      };
+      var cam = '<rect x="-14" y="-10" width="28" height="22" rx="5" fill="none" stroke="var(--sun)" stroke-width="2.5"/><circle cy="1" r="6" fill="none" stroke="var(--sun)" stroke-width="2.5"/>';
+      var chk = '<circle r="14" fill="none" stroke="var(--leaf)" stroke-width="2.5"/><path d="M-6 0 l4 5 l9 -10" fill="none" stroke="var(--leaf)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      var star = '<polygon points="0,-14 4,-5 14,-4 6,3 9,13 0,8 -9,13 -6,3 -14,-4 -4,-5" fill="var(--sun)"/>';
+      var shield = '<path d="M0 -14 L12 -9 V0 C12 8 6 13 0 16 C-6 13 -12 8 -12 0 V-9Z" fill="none" stroke="var(--foam)" stroke-width="2.5" stroke-linejoin="round"/>';
+      return chip(18, 40, 0.2, cam, 'Detect') + chip(190, 40, 0.7, chk, 'Act') + chip(18, 126, 1.2, star, 'Earn') + chip(190, 126, 1.7, shield, 'Protect');
+    },
+    function () {
+      return '<rect x="70" y="22" width="110" height="196" rx="18" fill="#082848" stroke="var(--mist)" stroke-width="2.5"/>' +
+        '<rect x="78" y="40" width="94" height="150" rx="8" fill="var(--deep)"/>' +
+        '<g transform="translate(125 118) rotate(-20)"><rect x="-8" y="-22" width="16" height="38" rx="5" fill="var(--foam)"/><rect x="-4" y="-30" width="8" height="9" rx="2" fill="var(--mist)"/></g>' +
+        '<path d="M88 80 V70 H98 M152 70 H162 V80 M162 150 V160 H152 M98 160 H88 V150" fill="none" stroke="var(--sun)" stroke-width="3" stroke-linecap="round"/>' +
+        '<rect class="scan" x="92" y="76" width="66" height="3" rx="1.5" fill="var(--sun)" opacity="0.8"/>' +
+        '<path class="flow" d="M172 115 L196 102" stroke="var(--sun)" stroke-width="2" stroke-dasharray="4 6" fill="none"/>' +
+        '<g class="pop" style="--d:1.2s"><rect x="196" y="70" width="156" height="64" rx="14" fill="var(--card)" stroke="var(--sun)"/>' +
+        '<text x="210" y="98" ' + F + ' font-size="16" font-weight="700" fill="var(--text)">PET Bottle</text>' +
+        '<text x="210" y="120" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">High priority · 82</text></g>' +
+        '<g class="pop" style="--d:2s"><circle cx="208" cy="166" r="5" fill="var(--leaf)"/><text x="220" y="170" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">On the map</text></g>';
+    },
+    function () {
+      var node = function (cx, d, color, inner, label) {
+        return '<g class="pop" style="--d:' + d + 's"><circle cx="' + cx + '" cy="100" r="22" fill="' + color + '"/>' + inner +
+          '<text x="' + cx + '" y="148" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--text)">' + label + '</text></g>';
+      };
+      var bang = function (cx) { return '<text x="' + cx + '" y="108" text-anchor="middle" ' + F + ' font-size="24" font-weight="700" fill="#06203F">!</text>'; };
+      var dots = function (cx) { return '<circle cx="' + (cx - 8) + '" cy="100" r="3" fill="#06203F"/><circle cx="' + cx + '" cy="100" r="3" fill="#06203F"/><circle cx="' + (cx + 8) + '" cy="100" r="3" fill="#06203F"/>'; };
+      var tick = function (cx) { return '<path d="M' + (cx - 8) + ' 100 l6 7 l11 -14" fill="none" stroke="#06203F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'; };
+      return '<path d="M82 100 H158 M202 100 H278" stroke="var(--line)" stroke-width="3" stroke-dasharray="4 6"/>' +
+        node(60, 0, 'var(--warn)', bang(60), 'Unverified') + node(180, 0.9, 'var(--sun)', dots(180), 'Cleanup planned') + node(300, 1.8, 'var(--leaf)', tick(300), 'Resolved');
+    },
+    function () {
+      return '<text id="pts" x="180" y="82" text-anchor="middle" ' + F + ' font-size="64" font-weight="700" fill="var(--sun)">0</text>' +
+        '<text x="180" y="106" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="var(--muted)">Blue Impact Points</text>' +
+        '<g class="pop" style="--d:.6s"><rect x="40" y="124" width="130" height="32" rx="16" fill="var(--card)" stroke="var(--line)"/><text x="105" y="145" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="var(--text)">Special access</text></g>' +
+        '<g class="pop" style="--d:.9s"><rect x="190" y="124" width="130" height="32" rx="16" fill="var(--card)" stroke="var(--line)"/><text x="255" y="145" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="var(--text)">Partner discounts</text></g>' +
+        '<g class="pop" style="--d:1.4s"><rect x="30" y="166" width="300" height="52" rx="26" fill="var(--sun)"/>' +
+        '<text x="180" y="189" text-anchor="middle" ' + F + ' font-size="16" font-weight="700" fill="#06203F">Blue Access restroom pass</text>' +
+        '<text x="180" y="207" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#06203F">Your first one is free</text></g>';
+    },
+    function () {
+      var hs = [60, 110, 40, 70, 50], bars = '';
+      for (var i = 0; i < hs.length; i++) {
+        bars += '<rect class="grow" style="--d:' + (i * 0.15) + 's" x="' + (50 + i * 58) + '" y="' + (190 - hs[i]) + '" width="36" height="' + hs[i] + '" rx="6" fill="' + (i === 1 ? 'var(--warn)' : 'var(--foam)') + '"/>';
+      }
+      return '<path d="M30 190 H330" stroke="var(--line)" stroke-width="2"/>' + bars +
+        '<text class="pop" x="126" y="68" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--warn)" style="--d:1s">Keeps coming back</text>' +
+        '<g class="pop" style="--d:1.8s"><rect x="214" y="24" width="130" height="44" rx="12" fill="var(--card)" stroke="var(--leaf)"/><text x="279" y="52" text-anchor="middle" ' + F + ' font-size="15" font-weight="700" fill="var(--leaf)">Fix the source</text></g>' +
+        '<text x="180" y="216" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="var(--muted)">NGOs and the city see the pattern</text>';
+    },
+    function () {
+      return '<g transform="translate(180 82)"><circle r="36" fill="none" stroke="var(--mist)" stroke-width="4"/><path d="M-22 -6 C-14 -14 -8 0 0 -6 S14 -14 22 -6" fill="none" stroke="var(--mist)" stroke-width="4" stroke-linecap="round"/><path d="M-22 8 C-14 0 -8 14 0 8 S14 0 22 8" fill="none" stroke="var(--mist)" stroke-width="4" stroke-linecap="round"/></g>' +
+        '<text x="180" y="150" text-anchor="middle" ' + F + ' font-size="26" font-weight="700" fill="var(--text)" letter-spacing="3">SMART DANUBE</text>' +
+        '<text x="180" y="176" text-anchor="middle" ' + F + ' font-size="15" fill="var(--sun)">Detect. Act. Earn. Protect.</text>' +
+        wave(204, 'var(--river)', 0.7, 7) + wave(222, 'var(--deep)', 0.9, 9);
+    }
+  ];
+
+  var scenes = [
+    { tag: 'The river', text: "The Danube is Budapest's biggest public space. Every day, people walk, cycle and meet beside it.", speak: "The Danube is Budapest's biggest public space. Every day, people walk, cycle and meet beside it." },
+    { tag: 'The problem', text: 'But waste builds up along the banks, and nobody has a clear picture of where it is, what it is, or what to do about it.', speak: 'But waste builds up along the banks, and nobody has a clear picture of where it is, what it is, or what to do about it.' },
+    { tag: 'The problem', text: 'Cities clean up after the fact, and most visitors feel the river belongs to somebody else.', speak: 'Cities clean up after the fact, and most visitors feel the river belongs to somebody else.' },
+    { tag: 'The gap', text: "And public toilets are scarce, so many people don't stay by the water for long.", speak: "And public toilets are scarce, so many people don't stay by the water for long." },
+    { tag: 'The solution', text: 'Smart Danube turns visitors into river guardians. Four steps: detect, act, earn, protect.', speak: 'Smart Danube turns visitors into river guardians. Four steps: detect, act, earn, protect.' },
+    { tag: 'Detect', text: 'Spot waste and snap a photo. The AI names the type and how urgent it is, and it lands on a live map for everyone.', speak: 'Spot waste and snap a photo. The A I names the type and how urgent it is, and it lands on a live map for everyone.' },
+    { tag: 'Act', text: 'Join a cleanup, or hand in what you collected at a drop-off point.', speak: 'Join a cleanup, or hand in what you collected at a drop-off point.' },
+    { tag: 'Earn', text: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.', speak: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.' },
+    { tag: 'Protect', text: 'Cities and NGOs see where waste keeps coming back, so they can fix the source, not only clean up the symptom.', speak: 'Cities and N G Os see where waste keeps coming back, so they can fix the source, not only clean up the symptom.' },
+    { tag: 'Join in', text: 'Open Smart Danube, take your first photo, and help keep the Danube clean.', speak: 'Open Smart Danube, take your first photo, and help keep the Danube clean.' }
+  ];
+
+  /* Voice: send the recording and it is listed here.
+     clips: ten files in story order, e.g. ['audio/part-01.mp3', ...]
+     single: one file plus the start time in seconds of each part, e.g. { src: 'audio/story.mp3', marks: [0, 11.4, ...] }
+     With neither, the page reads the story aloud with the device's own voice. */
+  var VOICE = { clips: ['audio/part-01.mp3','audio/part-02.mp3','audio/part-03.mp3','audio/part-04.mp3','audio/part-05.mp3','audio/part-06.mp3','audio/part-07.mp3','audio/part-08.mp3','audio/part-09.mp3','audio/part-10.mp3'], single: null };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var art = $('art'), tagEl = $('tag'), capEl = $('caption'), prog = $('progress');
+  var playBtn = $('play'), icoPlay = $('icoPlay'), icoPause = $('icoPause'), sndBtn = $('snd');
+  var last = scenes.length - 1;
+  var hasSpeech = 'speechSynthesis' in window && typeof window.SpeechSynthesisUtterance === 'function';
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasClips = !!(VOICE.clips && VOICE.clips.length === scenes.length);
+  var hasSingle = !!(VOICE.single && VOICE.single.marks && VOICE.single.marks.length === scenes.length);
+  var mode = hasSingle ? 'single' : (hasClips ? 'clips' : 'device');
+
+  var idx = 0, playing = false, finished = false, soundOn = true, runId = 0, timer = null, audio = null;
+
+  var dots = [];
+  scenes.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Part ' + (i + 1) + ': ' + s.tag);
+    b.addEventListener('click', function () { go(i); });
+    prog.appendChild(b);
+    dots.push(b);
+  });
+
+  function counter() {
+    var el = $('pts');
+    if (!el) return;
+    if (reduced) { el.textContent = '+999'; return; }
+    var t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / 1600, 1);
+      var e2 = $('pts');
+      if (!e2) return;
+      e2.textContent = '+' + String(Math.round(999 * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function render(i) {
+    idx = i;
+    tagEl.textContent = scenes[i].tag;
+    capEl.textContent = scenes[i].text;
+    art.innerHTML = arts[i]();
+    dots.forEach(function (d, k) { d.className = k < i ? 'done' : (k === i ? 'on' : ''); });
+    $('prev').disabled = i === 0;
+    $('next').disabled = i === last;
+    if (i === 7) counter();
+  }
+
+  function stopAudio() {
+    runId++;
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (hasSpeech) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+    if (audio) { try { audio.pause(); } catch (e) {} }
+  }
+
+  function setPlaying(on) {
+    playing = on;
+    icoPlay.hidden = on;
+    icoPause.hidden = !on;
+    playBtn.setAttribute('aria-label', on ? 'Pause the story' : (finished ? 'Replay the story' : 'Play the story'));
+  }
+
+  function finish() {
+    stopAudio();
+    finished = true;
+    setPlaying(false);
+  }
+
+  function advance(my) {
+    if (my !== runId || !playing) return;
+    if (idx < last) { render(idx + 1); startScene(); }
+    else { finish(); }
+  }
+
+  function advanceLater(my) {
+    if (my !== runId) return;
+    timer = setTimeout(function () { advance(my); }, 120);
+  }
+
+  function pickVoice() {
+    try {
+      var vs = window.speechSynthesis.getVoices() || [];
+      var en = vs.filter(function (v) { return /^en[-_]/i.test(v.lang); });
+      var pref = en.filter(function (v) { return /en[-_](GB|US)/i.test(v.lang); });
+      return (pref[0] || en[0]) || null;
+    } catch (e) { return null; }
+  }
+
+  function words(s) { return s.speak.split(' ').length; }
+
+  function deviceOrTimer(my) {
+    var s = scenes[idx];
+    if (soundOn && hasSpeech) {
+      var u = new window.SpeechSynthesisUtterance(s.speak);
+      var v = pickVoice();
+      if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'en-US'; }
+      u.rate = 0.95;
+      u.onend = function () { advanceLater(my); };
+      u.onerror = function () { if (my === runId) timer = setTimeout(function () { advance(my); }, Math.max(3000, words(s) * 420)); };
+      window._sdUtter = u;
+      try { window.speechSynthesis.speak(u); } catch (e) { u.onerror(); }
+    } else {
+      timer = setTimeout(function () { advance(my); }, Math.max(3500, words(s) * 420 + 1000));
+    }
+  }
+
+  function sceneAt(t) {
+    var m = VOICE.single.marks, k = 0;
+    for (var i = 0; i < m.length; i++) { if (t + 0.05 >= m[i]) k = i; }
+    return k;
+  }
+
+  function startScene() {
+    stopAudio();
+    var my = runId;
+    if (soundOn && mode === 'clips') {
+      if (!audio) audio = new Audio();
+      audio.onended = function () { advanceLater(my); };
+      audio.onerror = function () { if (my === runId) deviceOrTimer(my); };
+      audio.ontimeupdate = null;
+      audio.src = VOICE.clips[idx];
+      try { var nx = VOICE.clips[idx + 1]; if (nx) { if (!window._sdPre) window._sdPre = new Audio(); window._sdPre.preload = 'auto'; window._sdPre.src = nx; } } catch (e) {}
+      var p = audio.play();
+      if (p && p.catch) p.catch(function () { if (my === runId) deviceOrTimer(my); });
+    } else if (soundOn && mode === 'single') {
+      if (!audio) {
+        audio = new Audio();
+        audio.src = VOICE.single.src;
+      }
+      audio.onended = function () { if (my === runId) finish(); };
+      audio.onerror = function () { if (my === runId) deviceOrTimer(my); };
+      audio.ontimeupdate = function () {
+        if (my !== runId || !playing || audio.seeking) return;
+        var k = sceneAt(audio.currentTime);
+        if (k !== idx) render(k);
+      };
+      if (sceneAt(audio.currentTime) !== idx || audio.ended) {
+        try { audio.currentTime = VOICE.single.marks[idx]; } catch (e) {}
+      }
+      var p2 = audio.play();
+      if (p2 && p2.catch) p2.catch(function () { if (my === runId) deviceOrTimer(my); });
+    } else {
+      deviceOrTimer(my);
+    }
+  }
+
+  function go(i) {
+    render(i);
+    if (playing) startScene(); else stopAudio();
+  }
+
+  playBtn.addEventListener('click', function () {
+    if (playing) { stopAudio(); setPlaying(false); return; }
+    if (finished) { finished = false; render(0); }
+    setPlaying(true);
+    startScene();
+  });
+  $('prev').addEventListener('click', function () { if (idx > 0) go(idx - 1); });
+  $('next').addEventListener('click', function () { if (idx < last) go(idx + 1); });
+
+  function syncSound() {
+    sndBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    $('sndlabel').textContent = soundOn ? 'Sound on' : 'Sound off';
+    $('sndwave').style.display = soundOn ? '' : 'none';
+  }
+  sndBtn.addEventListener('click', function () {
+    soundOn = !soundOn;
+    syncSound();
+    if (playing) startScene();
+  });
+
+  if (mode === 'device' && !hasSpeech) { sndBtn.hidden = true; soundOn = false; }
+
+  if (hasSpeech) { try { window.speechSynthesis.getVoices(); } catch (e) {} }
+  syncSound();
+  render(0);
+  setPlaying(false);
+})();
+</script>
+
+</body>
+</html>
