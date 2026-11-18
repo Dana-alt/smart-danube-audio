@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>html{color-scheme:dark}body{margin:0}</style>
-<title>Smart Danube Audio Story</title>
+<title>VeroDuna Audio Story</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
 <style>
@@ -87,13 +87,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
 }
 </style>
 
-</head>
-<body>
 <main class="shell">
   <header class="top">
     <div class="brand">
       <svg width="30" height="30" viewBox="0 0 40 40" fill="none" stroke="#CFE4F6" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="20" cy="20" r="18"/><path d="M8 17 C 12 13, 16 21, 20 17 S 28 13, 32 17"/><path d="M8 25 C 12 21, 16 29, 20 25 S 28 21, 32 25"/></svg>
-      SMART DANUBE
+      VeroDuna
     </div>
     <button class="snd" id="snd" type="button" aria-pressed="true">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path id="sndwave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
@@ -123,8 +121,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
     </button>
   </div>
 
-  <p class="hint">The website is only a demo.</p>
-  <a class="cta" href="https://smartdanube.lovable.app" target="_blank" rel="noopener">Go to website</a>
+  <p class="hint">VeroDuna is a proposed concept. The website is only a demo.</p>
+  <a class="cta" href="https://veroduna.lovable.app/" target="_blank" rel="noopener">Go to website</a>
 </main>
 
 <script>
@@ -177,15 +175,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
     },
     function () {
       var chip = function (x, y, d, icon, word) {
-        return '<g class="pop" style="--d:' + d + 's"><rect x="' + x + '" y="' + y + '" width="152" height="70" rx="16" fill="var(--card)" stroke="var(--line)"/>' +
-          '<g transform="translate(' + (x + 30) + ' ' + (y + 35) + ')">' + icon + '</g>' +
-          '<text x="' + (x + 62) + '" y="' + (y + 42) + '" ' + F + ' font-size="20" font-weight="700" fill="var(--text)">' + word + '</text></g>';
+        return '<g class="pop" style="--d:' + d + 's"><rect x="' + x + '" y="' + y + '" width="152" height="58" rx="16" fill="var(--card)" stroke="var(--line)"/>' +
+          '<g transform="translate(' + (x + 28) + ' ' + (y + 29) + ')">' + icon + '</g>' +
+          '<text x="' + (x + 56) + '" y="' + (y + 36) + '" ' + F + ' font-size="19" font-weight="700" fill="var(--text)">' + word + '</text></g>';
       };
       var cam = '<rect x="-14" y="-10" width="28" height="22" rx="5" fill="none" stroke="var(--sun)" stroke-width="2.5"/><circle cy="1" r="6" fill="none" stroke="var(--sun)" stroke-width="2.5"/>';
       var chk = '<circle r="14" fill="none" stroke="var(--leaf)" stroke-width="2.5"/><path d="M-6 0 l4 5 l9 -10" fill="none" stroke="var(--leaf)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+      var box = '<path d="M-13 -2 V12 H13 V-2" fill="none" stroke="var(--foam)" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 -14 V4 M-6 -2 L0 4 L6 -2" fill="none" stroke="var(--foam)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
       var star = '<polygon points="0,-14 4,-5 14,-4 6,3 9,13 0,8 -9,13 -6,3 -14,-4 -4,-5" fill="var(--sun)"/>';
-      var shield = '<path d="M0 -14 L12 -9 V0 C12 8 6 13 0 16 C-6 13 -12 8 -12 0 V-9Z" fill="none" stroke="var(--foam)" stroke-width="2.5" stroke-linejoin="round"/>';
-      return chip(18, 40, 0.2, cam, 'Detect') + chip(190, 40, 0.7, chk, 'Act') + chip(18, 126, 1.2, star, 'Earn') + chip(190, 126, 1.7, shield, 'Protect');
+      var bars = '<path d="M-12 13 V2 M0 13 V-12 M12 13 V-5" fill="none" stroke="var(--foam)" stroke-width="5" stroke-linecap="round"/>';
+      return chip(18, 20, 0.2, cam, 'Detect') + chip(190, 20, 0.6, chk, 'Verify') + chip(18, 92, 1.0, box, 'Act') + chip(190, 92, 1.4, star, 'Reward') + chip(104, 164, 1.8, bars, 'Measure');
     },
     function () {
       return '<rect x="70" y="22" width="110" height="196" rx="18" fill="#082848" stroke="var(--mist)" stroke-width="2.5"/>' +
@@ -197,7 +196,19 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
         '<g class="pop" style="--d:1.2s"><rect x="196" y="70" width="156" height="64" rx="14" fill="var(--card)" stroke="var(--sun)"/>' +
         '<text x="210" y="98" ' + F + ' font-size="16" font-weight="700" fill="var(--text)">PET Bottle</text>' +
         '<text x="210" y="120" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">High priority · 82</text></g>' +
+        '<g class="pop" style="--d:.6s"><rect x="196" y="28" width="136" height="26" rx="13" fill="none" stroke="var(--sun)" stroke-dasharray="4 4"/><text x="264" y="45" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--sun)">Proposed AI feature</text></g>' +
         '<g class="pop" style="--d:2s"><circle cx="208" cy="166" r="5" fill="var(--leaf)"/><text x="220" y="170" font-family="Inter, sans-serif" font-size="12" fill="var(--muted)">On the map</text></g>';
+    },
+    function () {
+      var frame = function (x, d, label, col) {
+        return '<g class="pop" style="--d:' + d + 's"><rect x="' + x + '" y="62" width="104" height="84" rx="12" fill="var(--card)" stroke="' + col + '" stroke-width="2"/>' +
+          '<path d="M' + (x + 12) + ' 128 L' + (x + 38) + ' 98 L' + (x + 56) + ' 116 L' + (x + 74) + ' 90 L' + (x + 92) + ' 128" fill="none" stroke="var(--mist)" stroke-width="2.5" stroke-linejoin="round"/>' +
+          '<text x="' + (x + 52) + '" y="164" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="var(--muted)">' + label + '</text></g>';
+      };
+      return frame(46, 0, 'Report', 'var(--warn)') + frame(210, 0.8, 'Cleanup', 'var(--leaf)') +
+        '<path class="flow" d="M154 104 H204" stroke="var(--mist)" stroke-width="2.5" stroke-dasharray="6 8" fill="none"/>' +
+        '<g class="pop" style="--d:1.6s"><circle cx="180" cy="38" r="20" fill="var(--leaf)"/><path d="M170 38 l7 8 l14 -17" fill="none" stroke="#06203F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>' +
+        '<text class="pop" x="180" y="212" text-anchor="middle" ' + F + ' font-size="16" font-weight="700" fill="var(--text)" style="--d:2s">Verified before it counts</text>';
     },
     function () {
       var node = function (cx, d, color, inner, label) {
@@ -231,8 +242,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
     },
     function () {
       return '<g transform="translate(180 82)"><circle r="36" fill="none" stroke="var(--mist)" stroke-width="4"/><path d="M-22 -6 C-14 -14 -8 0 0 -6 S14 -14 22 -6" fill="none" stroke="var(--mist)" stroke-width="4" stroke-linecap="round"/><path d="M-22 8 C-14 0 -8 14 0 8 S14 0 22 8" fill="none" stroke="var(--mist)" stroke-width="4" stroke-linecap="round"/></g>' +
-        '<text x="180" y="150" text-anchor="middle" ' + F + ' font-size="26" font-weight="700" fill="var(--text)" letter-spacing="3">SMART DANUBE</text>' +
-        '<text x="180" y="176" text-anchor="middle" ' + F + ' font-size="15" fill="var(--sun)">Detect. Act. Earn. Protect.</text>' +
+        '<text x="180" y="150" text-anchor="middle" ' + F + ' font-size="26" font-weight="700" fill="var(--text)" letter-spacing="3">VeroDuna</text>' +
+        '<text x="180" y="176" text-anchor="middle" ' + F + ' font-size="12.5" fill="var(--sun)">Detect → Verify → Act → Reward → Measure</text>' +
         wave(204, 'var(--river)', 0.7, 7) + wave(222, 'var(--deep)', 0.9, 9);
     }
   ];
@@ -242,19 +253,20 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
     { tag: 'The problem', text: 'But waste builds up along the banks, and nobody has a clear picture of where it is, what it is, or what to do about it.', speak: 'But waste builds up along the banks, and nobody has a clear picture of where it is, what it is, or what to do about it.' },
     { tag: 'The problem', text: 'Cities clean up after the fact, and most visitors feel the river belongs to somebody else.', speak: 'Cities clean up after the fact, and most visitors feel the river belongs to somebody else.' },
     { tag: 'The gap', text: "And public toilets are scarce, so many people don't stay by the water for long.", speak: "And public toilets are scarce, so many people don't stay by the water for long." },
-    { tag: 'The solution', text: 'Smart Danube turns visitors into river guardians. Four steps: detect, act, earn, protect.', speak: 'Smart Danube turns visitors into river guardians. Four steps: detect, act, earn, protect.' },
-    { tag: 'Detect', text: 'Spot waste and snap a photo. The AI names the type and how urgent it is, and it lands on a live map for everyone.', speak: 'Spot waste and snap a photo. The A I names the type and how urgent it is, and it lands on a live map for everyone.' },
+    { tag: "The proposal", text: "VeroDuna is a proposal to turn visitors into river guardians, in five steps: detect, verify, act, reward, measure.", speak: "VeroDuna is a proposal to turn visitors into river guardians, in five steps: detect, verify, act, reward, measure." },
+    { tag: "Detect \u00b7 proposed AI", text: "Spot waste and snap a photo. The proposed AI would name the type and how urgent it is, and it would land on a live map for everyone.", speak: "Spot waste and snap a photo. The proposed A I would name the type and how urgent it is, and it would land on a live map for everyone." },
+    { tag: "Verify", text: "Reports and cleanups are then verified, so everyone can trust what is on the map.", speak: "Reports and cleanups are then verified, so everyone can trust what is on the map." },
     { tag: 'Act', text: 'Join a cleanup, or hand in what you collected at a drop-off point.', speak: 'Join a cleanup, or hand in what you collected at a drop-off point.' },
-    { tag: 'Earn', text: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.', speak: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.' },
-    { tag: 'Protect', text: 'Cities and NGOs see where waste keeps coming back, so they can fix the source, not only clean up the symptom.', speak: 'Cities and N G Os see where waste keeps coming back, so they can fix the source, not only clean up the symptom.' },
-    { tag: 'Join in', text: 'Open Smart Danube, take your first photo, and help keep the Danube clean.', speak: 'Open Smart Danube, take your first photo, and help keep the Danube clean.' }
+    { tag: 'Reward · proposed', text: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.', speak: 'You collect Blue Impact Points and spend them on local rewards. One is Blue Access: a restroom pass at local partner spots. Your first one is free.' },
+    { tag: 'Measure', text: 'Cities and NGOs see where waste keeps coming back, so they can fix the source, not only clean up the symptom.', speak: 'Cities and N G Os see where waste keeps coming back, so they can fix the source, not only clean up the symptom.' },
+    { tag: "Join in", text: "Try the VeroDuna demo, and help keep the Danube clean.", speak: "Try the VeroDuna demo, and help keep the Danube clean." }
   ];
 
   /* Voice: send the recording and it is listed here.
      clips: ten files in story order, e.g. ['audio/part-01.mp3', ...]
      single: one file plus the start time in seconds of each part, e.g. { src: 'audio/story.mp3', marks: [0, 11.4, ...] }
      With neither, the page reads the story aloud with the device's own voice. */
-  var VOICE = { clips: ['audio/part-01.mp3','audio/part-02.mp3','audio/part-03.mp3','audio/part-04.mp3','audio/part-05.mp3','audio/part-06.mp3','audio/part-07.mp3','audio/part-08.mp3','audio/part-09.mp3','audio/part-10.mp3'], single: null };
+  var VOICE = { clips: ['audio/part-01.mp3','audio/part-02.mp3','audio/part-03.mp3','audio/part-04.mp3','audio/part-05.mp3','audio/part-06.mp3','audio/part-07.mp3','audio/part-08.mp3','audio/part-09.mp3','audio/part-10.mp3','audio/part-11.mp3'], single: null };
 
   var $ = function (id) { return document.getElementById(id); };
   var art = $('art'), tagEl = $('tag'), capEl = $('caption'), prog = $('progress');
@@ -302,7 +314,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--sun); outline-o
     dots.forEach(function (d, k) { d.className = k < i ? 'done' : (k === i ? 'on' : ''); });
     $('prev').disabled = i === 0;
     $('next').disabled = i === last;
-    if (i === 7) counter();
+    if (i === 8) counter();
   }
 
   function stopAudio() {
